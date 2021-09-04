@@ -2,6 +2,7 @@ package com.metingokmen.catchthekenny;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.gridlayout.widget.GridLayout;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     int score;
     Handler handler;
     Runnable runnable;
+    GridLayout gridLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         //restart
-                        Intent intent = getIntent();
+                        Intent intent = new Intent(MainActivity.this,MainActivity2.class);
                         finish();
                         startActivity(intent);
                     }
