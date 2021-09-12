@@ -6,6 +6,7 @@ import androidx.gridlayout.widget.GridLayout;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,9 +34,13 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView9;
     ImageView[] imgArray;
     int score;
+    int lastScore;
     Handler handler;
     Runnable runnable;
     GridLayout gridLayout;
+    SharedPreferences sharedPreferences;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +58,20 @@ public class MainActivity extends AppCompatActivity {
         imageView8 = findViewById(R.id.imageView8);
         imageView9 = findViewById(R.id.imageView9);
 
-        imgArray = new ImageView[] {imageView,imageView2,imageView3,imageView4,imageView5,imageView6,imageView7,imageView8,imageView9};
+
+
+
+        imgArray = new ImageView[] {imageView,imageView2,imageView3,imageView4,
+                imageView5,imageView6,imageView7,imageView8,imageView9};
         hideImages();
 
 
-        score = 0;
+        sharedPreferences = getSharedPreferences("com.metingokmen.catchthekenny",MODE_PRIVATE);
+        sharedPreferences.edit().putInt("highScore",lastScore).apply();
+        sharedPreferences.edit().putInt("score",score).apply();
+
+
+
         CountDownTimer cdt = new CountDownTimer(10000,1000) {
             @Override
             public void onTick(long l) {
@@ -79,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         //restart
-                        Intent intent = new Intent(MainActivity.this,MainActivity2.class);
+                        Intent intent = getIntent();
                         finish();
                         startActivity(intent);
                     }
@@ -88,7 +103,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Toast.makeText(MainActivity.this,"Game Over",Toast.LENGTH_LONG).show();
-                        //nothing
+                        Intent intent = new Intent(getApplicationContext(),MainActivity2.class);
+
+                        intent.putExtra("score",score);
+                        startActivity(intent);
+
+
                     }
                 });
                 alert.show();
@@ -96,12 +116,14 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         cdt.start();
+        score = 0;
 
 
     }
     public void increaseScore(View view){
         score++;
         scoreText.setText("Score: " + score);
+
     }
 
     public void hideImages(){

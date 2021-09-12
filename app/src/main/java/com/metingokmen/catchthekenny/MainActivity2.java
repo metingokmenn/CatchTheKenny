@@ -6,9 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 public class MainActivity2 extends AppCompatActivity {
     SharedPreferences sharedPreferences;
@@ -16,15 +20,47 @@ public class MainActivity2 extends AppCompatActivity {
     EditText textPassword;
     String password;
     String username;
+    TextView textView;
+    int lastScore;
+    int score;
+    ArrayList<Integer> scoreList;
+    Runnable runnable;
+    Handler handler;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+        scoreList = new ArrayList<Integer>();
+        textView = findViewById(R.id.textView);
         sharedPreferences = getSharedPreferences("com.metingokmen.catchthekenny",MODE_PRIVATE);
+        Intent intent = getIntent();
         textUsername = findViewById(R.id.textName);
         textPassword = findViewById(R.id.textPassword);
 
+
+
+
+
+
+        scoreList.add(intent.getIntExtra("score",0));
+        if(intent.getIntExtra("score",0) > lastScore){
+            textView.setText("Last score: " + intent.getIntExtra("score",0));
+        }
+        else{
+            textView.setText("Last score: " + lastScore);
+        }
+
+        textView.setText("Last score: " + intent.getIntExtra("score",0));
+
+
+
+
+
+        username = sharedPreferences.getString("username","");
+        password = sharedPreferences.getString("password","");
 
     }
 
